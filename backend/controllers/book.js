@@ -1,5 +1,4 @@
-const { Book } = require("../../backend/app");
-const jsonwebtoken = require("jsonwebtoken");
+const { Book } = require("../../backend/models/Book");
 
 async function modifyBook(req, res) {
   const id = req.params.id;
@@ -50,33 +49,6 @@ async function deleteBook(req, res) {
   }
 }
 
-function checkToken(req, res, next) {
-  const headers = req.headers;
-  const authorization = headers.authorization;
-  if (authorization == null) {
-    res.status(401).send("Unauthorized");
-    return;
-  }
-  const token = authorization.split(" ")[1];
-  console.log("token:", token);
-  try {
-    const jsonwebtokenSecret = String(process.env.JSONWEBTOKEN_SECRET)
-    const result = jsonwebtoken.verify(token, jsonwebtokenSecret);
-  console.log("result:", result);
-  if (result == null) {
-    res.status(401).send("Non autorisé");
-    return;
-  }
-  req.result = result;
-  req.tokenPayload = result;
-    next();
-  } catch (e) {
-    console.error(e);
-    res.status(401).send("Non autorisé");
-  }
-  }
-
-
 async function getBookById(req, res) {
   const id = req.params.id;
   try {
@@ -120,4 +92,4 @@ function getImagePath(fileName) {
   }
 }
 
-module.exports = { modifyBook, deleteBook, checkToken, getBookById, getBooks, postBook, getImagePath }
+module.exports = { modifyBook, deleteBook, getBookById, getBooks, postBook, getImagePath }

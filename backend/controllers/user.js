@@ -1,18 +1,11 @@
-const { User } = require("../../backend/app");
+const { User } = require("../../backend/models/User");
 const bcrypt = require("bcrypt");
 const jsonwebtoken = require("jsonwebtoken");
 
 async function signUp(req, res) {
   const email = req.body.email;
   const password = req.body.password;
-  const userDb = await User.findOne({
-    email: email
-  });
-  
-  if (userDb != null) {
-    res.status(400).send("L'adresse mail est déjà existante");
-    return;
-  }
+
   function hashPassword(password){
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
@@ -22,14 +15,17 @@ async function signUp(req, res) {
     email: email,
     password: hashPassword(password)
   };
-  try{
+  try {
     await User.create(user);
+    res.send("Sign up");
   } catch (e) {
     console.error(e);
-    res.status(500).send("Erreur du serveur");
-    return;
+    if (e.code === 11000) {
+      res.status(400).send("L'adresse mail est déjà existante");
+    } else {
+      res.status(500).send("Erreur du serveur");
+    }
   }
-  res.send("Sign up");
 }
 async function loginUser(req, res){
   const body = req.body;

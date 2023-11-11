@@ -1,4 +1,4 @@
-const { Book } = require("../../backend/app");
+const { Book } = require("../../backend/models/Book");
 const { getImagePath } = require("../controllers/book");
 
 async function postRating(req, res) {

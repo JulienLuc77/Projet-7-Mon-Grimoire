@@ -36,7 +36,8 @@ app.post("/images", upload.single("image"), async (req, res) => {
 
   try {
     const resizedImage = await sharp(buffer)
-      .webp({ quality: 20 })
+      .resize(800, 600)
+      .webp({ quality: 80 })
       .toBuffer();
 
     await fs.writeFile("uploads/" + ref, resizedImage);

@@ -1,7 +1,7 @@
-const { app } = require("../backend/middleware/use");
+const { app, checkToken} = require("../backend/middleware/auth");
 const { upload } = require("../backend/middleware/upload");
 const { signUp, loginUser } = require("../backend/controllers/user");
-const { modifyBook, deleteBook, checkToken, getBookById, getBooks, postBook } = require("../backend/controllers/book");
+const { modifyBook, deleteBook, getBookById, getBooks, postBook } = require("../backend/controllers/book");
 const { postRating, getBestRating } = require("../backend/controllers/rating");
 
 app.post("/api/auth/signup", signUp);
